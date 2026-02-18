@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>ALNOOR GARDEN HOME EXPESE</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 body{
     margin:0;
@@ -75,6 +77,7 @@ table{
 th,td{
     padding:10px;
     text-align:left;
+    font-size:14px;
 }
 
 th{
@@ -123,9 +126,8 @@ button:hover{
     margin:10px;
     border-radius:8px;
     border:none;
-    width:200px;
+    width:220px;
 }
-
 </style>
 </head>
 
@@ -192,15 +194,16 @@ button:hover{
         Enter Expense Now
     </button>
     <button onclick="fetchData()">Refresh Data</button>
+    <button onclick="exportPDF()">Export to PDF</button>
 </div>
 
 </div>
 
 <script>
 const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
-
 const defaultPassword="Alnoor1234";
 let sheetData=[];
+let filteredData=[];
 
 function checkPassword(){
     const input=document.getElementById("passwordInput").value;
@@ -238,7 +241,7 @@ function applyFilters(){
     const head=document.getElementById("headFilter").value;
     const mode=document.getElementById("modeFilter").value;
 
-    let filtered=sheetData.filter(item=>{
+    filteredData=sheetData.filter(item=>{
         let valid=true;
         if(from && new Date(item.date)<new Date(from)) valid=false;
         if(to && new Date(item.date)>new Date(to)) valid=false;
@@ -251,7 +254,7 @@ function applyFilters(){
     const tbody=document.getElementById("tableBody");
     tbody.innerHTML="";
 
-    filtered.forEach(item=>{
+    filteredData.forEach(item=>{
         total+=item.amount;
         tbody.innerHTML+=`
         <tr>
@@ -264,6 +267,38 @@ function applyFilters(){
     });
 
     document.getElementById("totalExpense").innerText=total.toLocaleString();
+}
+
+function exportPDF(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("ALNOOR EXPENSE SHEET", 60, 15);
+
+    doc.setFontSize(10);
+    doc.text("Generated on: "+new Date().toLocaleString(), 14, 25);
+
+    let y=35;
+    doc.setFontSize(9);
+    filteredData.forEach((item,index)=>{
+        doc.text(
+            `${index+1}. ${item.head} | ${item.description} | Rs ${item.amount} | ${item.mode} | ${item.date}`,
+            14,
+            y
+        );
+        y+=6;
+        if(y>280){
+            doc.addPage();
+            y=20;
+        }
+    });
+
+    const total=document.getElementById("totalExpense").innerText;
+    doc.setFontSize(12);
+    doc.text("Total Expense: Rs "+total,14,y+10);
+
+    doc.save("Alnoor_Expense_Report.pdf");
 }
 
 document.querySelectorAll("#fromDate,#toDate,#headFilter,#modeFilter")
