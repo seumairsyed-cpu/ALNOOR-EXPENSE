@@ -2,181 +2,168 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALNOOR GARDEN HOME EXPESE</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
 <style>
 body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:white;
+margin:0;
+font-family: 'Segoe UI',sans-serif;
+background: linear-gradient(135deg,#1f4037,#99f2c8);
+color:#fff;
 }
 
 .container{
-    width:95%;
-    margin:auto;
-    padding:20px;
+max-width:1200px;
+margin:auto;
+padding:15px;
 }
 
-header{
-    text-align:center;
-    font-size:30px;
-    font-weight:700;
-    letter-spacing:2px;
-    margin-top:10px;
+.header{
+text-align:center;
+font-size:28px;
+font-weight:700;
+letter-spacing:1px;
 }
 
-#clock{
-    position:absolute;
-    top:20px;
-    right:30px;
-    text-align:right;
-    font-size:14px;
-    font-weight:600;
+.clock{
+position:absolute;
+top:15px;
+right:20px;
+font-size:14px;
+text-align:right;
 }
 
 .filters{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
-    margin:25px 0;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+margin-top:20px;
 }
 
 .filters input,.filters select{
-    padding:8px 12px;
-    border-radius:8px;
-    border:none;
-    font-weight:600;
+padding:8px;
+border-radius:6px;
+border:none;
+min-width:150px;
 }
 
 .kpi{
-    text-align:center;
-    font-size:32px;
-    font-weight:700;
-    margin:20px auto;
-    padding:15px;
-    width:60%;
-    border-radius:12px;
-    background:linear-gradient(90deg,#00c6ff,#0072ff);
-    box-shadow:0 4px 20px rgba(0,0,0,0.4);
+margin-top:20px;
+text-align:center;
+font-size:22px;
+font-weight:700;
+background:linear-gradient(90deg,#ff9966,#ff5e62);
+padding:10px;
+border-radius:8px;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    background:white;
-    color:black;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-th,td{
-    padding:10px;
-    text-align:left;
-    font-size:14px;
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+background:#fff;
+color:#000;
+border-radius:8px;
+overflow:hidden;
 }
 
 th{
-    background:#0072ff;
-    color:white;
+background:#1f4037;
+color:#fff;
+padding:10px;
 }
 
-tr:nth-child(even){
-    background:#f2f2f2;
+td{
+padding:8px;
+border-bottom:1px solid #ddd;
+text-align:center;
 }
 
 .buttons{
-    text-align:center;
-    margin:30px 0;
+margin-top:20px;
+text-align:center;
 }
 
-button{
-    padding:10px 25px;
-    margin:10px;
-    border:none;
-    border-radius:8px;
-    font-weight:700;
-    cursor:pointer;
-    background:linear-gradient(90deg,#ff512f,#dd2476);
-    color:white;
-    font-size:14px;
+.buttons button{
+padding:10px 15px;
+margin:5px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:600;
 }
 
-button:hover{
-    opacity:0.9;
-}
+.enter-btn{background:#ff9966;color:#fff;}
+.refresh-btn{background:#00c6ff;color:#fff;}
+.pdf-btn{background:#11998e;color:#fff;}
 
-#loginScreen{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:linear-gradient(135deg,#141e30,#243b55);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
+@media(max-width:600px){
+.filters{
+flex-direction:column;
+align-items:center;
 }
-
-#loginScreen input{
-    padding:10px;
-    margin:10px;
-    border-radius:8px;
-    border:none;
-    width:220px;
+.clock{
+position:static;
+margin-top:10px;
+text-align:center;
+}
 }
 </style>
 </head>
 
 <body>
 
-<div id="loginScreen">
-    <h2>ALNOOR GARDEN HOME EXPESE</h2>
-    <input type="password" id="passwordInput" placeholder="Enter Password">
-    <button onclick="checkPassword()">Login</button>
+<div id="loginScreen" style="height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,#1f4037,#99f2c8);">
+<div style="background:white;padding:30px;border-radius:10px;text-align:center;color:black;">
+<h3>Enter Password</h3>
+<input type="password" id="password" placeholder="Enter Password" style="padding:8px;width:200px;"><br><br>
+<button onclick="checkPassword()" style="padding:8px 15px;">Login</button>
+<p id="error" style="color:red;"></p>
+</div>
 </div>
 
-<div class="container" id="dashboard" style="display:none;">
-
-<div id="clock"></div>
-
-<header>ALNOOR GARDEN HOME EXPESE</header>
+<div id="dashboard" style="display:none;">
+<div class="container">
+<div class="header">ALNOOR GARDEN HOME EXPESE</div>
+<div class="clock" id="clock"></div>
 
 <div class="filters">
-    <input type="date" id="fromDate">
-    <input type="date" id="toDate">
+<input type="date" id="fromDate">
+<input type="date" id="toDate">
 
-    <select id="headFilter">
-        <option value="">All Heads</option>
-        <option>ELECTRICITY BILL</option>
-        <option>SUI GAS BILL</option>
-        <option>WATER BILL</option>
-        <option>STORM FIBER</option>
-        <option>SECURITY BILL</option>
-        <option>GROCERY</option>
-        <option>PLUMBING</option>
-        <option>ELECTRIC WORK</option>
-        <option>CAR RELATED</option>
-        <option>MISC. HOUSEHOLD</option>
-        <option>MISC. EXPENSE</option>
-    </select>
+<select id="headFilter">
+<option value="">All Heads</option>
+<option>ELECTRICITY BILL</option>
+<option>SUI GAS BILL</option>
+<option>WATER BILL</option>
+<option>STORM FIBER</option>
+<option>SECURITY BILL</option>
+<option>GROCERY</option>
+<option>PLUMBING</option>
+<option>ELECTRIC WORK</option>
+<option>CAR RELATED</option>
+<option>MISC. HOUSEHOLD</option>
+<option>MISC. EXPENSE</option>
+</select>
 
-    <select id="modeFilter">
-        <option value="">All Modes</option>
-        <option>CASH</option>
-        <option>ONLINE</option>
-        <option>DEBIT CARD</option>
-    </select>
+<select id="modeFilter">
+<option value="">All Modes</option>
+<option>CASH</option>
+<option>ONLINE</option>
+<option>DEBIT CARD</option>
+</select>
 </div>
 
 <div class="kpi">
-    TOTAL EXPENSE: Rs <span id="totalExpense">0</span>
+Total Expense: Rs <span id="totalExpense">0</span>
 </div>
 
-<table>
+<table id="expenseTable">
 <thead>
 <tr>
 <th>HEAD</th>
@@ -186,134 +173,133 @@ button:hover{
 <th>DATE</th>
 </tr>
 </thead>
-<tbody id="tableBody"></tbody>
+<tbody></tbody>
 </table>
 
 <div class="buttons">
-    <button onclick="window.open('https://forms.gle/RHvNmsEchqCM1QK48','_blank')">
-        Enter Expense Now
-    </button>
-    <button onclick="fetchData()">Refresh Data</button>
-    <button onclick="exportPDF()">Export to PDF</button>
+<button class="enter-btn" onclick="window.open('https://forms.gle/RHvNmsEchqCM1QK48','_blank')">Enter Expense Now</button>
+<button class="refresh-btn" onclick="fetchData()">Refresh Data</button>
+<button class="pdf-btn" onclick="exportPDF()">Export to PDF</button>
 </div>
 
+</div>
 </div>
 
 <script>
-const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
-const defaultPassword="Alnoor1234";
-let sheetData=[];
-let filteredData=[];
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
+
+let allData=[];
 
 function checkPassword(){
-    const input=document.getElementById("passwordInput").value;
-    if(input===defaultPassword){
-        document.getElementById("loginScreen").style.display="none";
-        document.getElementById("dashboard").style.display="block";
-        fetchData();
-    }else{
-        alert("Incorrect Password");
-    }
+let pass=document.getElementById("password").value;
+if(pass==="Alnoor1234"){
+document.getElementById("loginScreen").style.display="none";
+document.getElementById("dashboard").style.display="block";
+fetchData();
+}else{
+document.getElementById("error").innerText="Incorrect Password";
+}
 }
 
 function fetchData(){
 fetch(sheetURL)
 .then(res=>res.text())
 .then(csv=>{
-    const rows=csv.trim().split("\n").slice(1);
-    sheetData=rows.map(r=>{
-        const cols=r.split(",");
-        return{
-            head:cols[1],
-            description:cols[2],
-            amount:parseFloat(cols[3])||0,
-            mode:cols[4],
-            date:cols[5]
-        }
-    });
-    applyFilters();
+let rows=csv.split("\n").slice(1);
+allData=rows.map(r=>{
+let cols=r.split(",");
+return {
+head:cols[1],
+description:cols[2],
+amount:parseFloat(cols[3])||0,
+mode:cols[4],
+date:cols[5]
+}
+});
+filterData();
 });
 }
 
-function applyFilters(){
-    const from=document.getElementById("fromDate").value;
-    const to=document.getElementById("toDate").value;
-    const head=document.getElementById("headFilter").value;
-    const mode=document.getElementById("modeFilter").value;
+function filterData(){
+let from=document.getElementById("fromDate").value;
+let to=document.getElementById("toDate").value;
+let head=document.getElementById("headFilter").value;
+let mode=document.getElementById("modeFilter").value;
 
-    filteredData=sheetData.filter(item=>{
-        let valid=true;
-        if(from && new Date(item.date)<new Date(from)) valid=false;
-        if(to && new Date(item.date)>new Date(to)) valid=false;
-        if(head && item.head!==head) valid=false;
-        if(mode && item.mode!==mode) valid=false;
-        return valid;
-    });
+let filtered=allData.filter(item=>{
+let itemDate=new Date(item.date);
+let cond=true;
 
-    let total=0;
-    const tbody=document.getElementById("tableBody");
-    tbody.innerHTML="";
+if(from) cond=cond && itemDate>=new Date(from);
+if(to) cond=cond && itemDate<=new Date(to);
+if(head) cond=cond && item.head===head;
+if(mode) cond=cond && item.mode===mode;
 
-    filteredData.forEach(item=>{
-        total+=item.amount;
-        tbody.innerHTML+=`
-        <tr>
-            <td>${item.head}</td>
-            <td>${item.description}</td>
-            <td>${item.amount.toLocaleString()}</td>
-            <td>${item.mode}</td>
-            <td>${item.date}</td>
-        </tr>`;
-    });
+return cond;
+});
 
-    document.getElementById("totalExpense").innerText=total.toLocaleString();
+let tbody=document.querySelector("#expenseTable tbody");
+tbody.innerHTML="";
+let total=0;
+
+filtered.forEach(item=>{
+total+=item.amount;
+tbody.innerHTML+=`
+<tr>
+<td>${item.head}</td>
+<td>${item.description}</td>
+<td>${item.amount.toLocaleString()}</td>
+<td>${item.mode}</td>
+<td>${item.date}</td>
+</tr>`;
+});
+
+document.getElementById("totalExpense").innerText=total.toLocaleString();
 }
+
+document.querySelectorAll("input,select").forEach(el=>{
+el.addEventListener("change",filterData);
+});
 
 function exportPDF(){
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+const { jsPDF } = window.jspdf;
+let doc=new jsPDF();
 
-    doc.setFontSize(16);
-    doc.text("ALNOOR EXPENSE SHEET", 60, 15);
+doc.setFontSize(16);
+doc.text("ALNOOR EXPENSE SHEET",70,15);
 
-    doc.setFontSize(10);
-    doc.text("Generated on: "+new Date().toLocaleString(), 14, 25);
+let rows=[];
+document.querySelectorAll("#expenseTable tbody tr").forEach(tr=>{
+let row=[];
+tr.querySelectorAll("td").forEach(td=>{
+row.push(td.innerText);
+});
+rows.push(row);
+});
 
-    let y=35;
-    doc.setFontSize(9);
-    filteredData.forEach((item,index)=>{
-        doc.text(
-            `${index+1}. ${item.head} | ${item.description} | Rs ${item.amount} | ${item.mode} | ${item.date}`,
-            14,
-            y
-        );
-        y+=6;
-        if(y>280){
-            doc.addPage();
-            y=20;
-        }
-    });
+doc.autoTable({
+head:[["HEAD","DESCRIPTION","AMOUNT","MODE","DATE"]],
+body:rows,
+startY:25
+});
 
-    const total=document.getElementById("totalExpense").innerText;
-    doc.setFontSize(12);
-    doc.text("Total Expense: Rs "+total,14,y+10);
+doc.text("Total Expense: Rs "+document.getElementById("totalExpense").innerText,14,doc.lastAutoTable.finalY+10);
 
-    doc.save("Alnoor_Expense_Report.pdf");
+doc.save("Expense_Report.pdf");
 }
 
-document.querySelectorAll("#fromDate,#toDate,#headFilter,#modeFilter")
-.forEach(el=>el.addEventListener("change",applyFilters));
-
 function updateClock(){
-    const now=new Date();
-    const days=["SUN","MON","TUE","WED","THU","FRI","SAT"];
-    const time=now.toLocaleTimeString("en-GB",{hour12:false});
-    const date=now.toLocaleDateString("en-GB");
-    document.getElementById("clock").innerHTML=
-    time+"<br>"+date+" "+days[now.getDay()];
+let now=new Date();
+let days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+let time=now.toLocaleTimeString();
+let date=("0"+now.getDate()).slice(-2)+"/"+("0"+(now.getMonth()+1)).slice(-2)+"/"+now.getFullYear();
+let day=days[now.getDay()];
+document.getElementById("clock").innerHTML=time+"<br>"+date+" | "+day;
 }
 setInterval(updateClock,1000);
 updateClock();
+
 </script>
 
 </body>
