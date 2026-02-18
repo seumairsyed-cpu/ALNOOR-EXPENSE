@@ -2,203 +2,278 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ALNOOR GARDEN HOME EXPENSE</title>
+<title>ALNOOR GARDEN HOME EXPESE</title>
+
 <style>
-    body {
-        margin: 0; font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #f7faff, #e4f0fe);
-        color: #333;
-    }
-    header {
-        padding: 15px 30px; background: #fff;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-        position: relative;
-    }
-    h1 { margin: 0; font-size: 24px; font-weight: bold; color: #1a4d8f; }
-    #clock {
-        position: absolute; top: 15px; right: 30px;
-        font-size: 18px; font-weight: bold;
-        color: #1a4d8f;
-    }
-    .filters {
-        padding: 20px 30px;
-        display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px;
-    }
-    label { font-size: 14px; font-weight: bold; }
-    input, select {
-        padding: 8px; border: 1px solid #888; border-radius: 5px;
-        font-size: 14px;
-    }
-    #kpi {
-        margin: 20px 30px; font-size: 20px; font-weight: bold; color: #065a9a;
-    }
-    table {
-        width: calc(100% - 60px);
-        margin: 0 30px 40px 30px; border-collapse: collapse;
-    }
-    th, td {
-        border: 1px solid #ccc; padding: 8px; font-size: 14px;
-    }
-    th {
-        background: #e4efff; color: #1a4d8f;
-    }
-    tfoot tr td {
-        font-weight: bold; background: #fafcff;
-    }
-    .buttons {
-        position: fixed; bottom: 20px; width: 100%;
-        display: flex; justify-content: space-between; padding: 0 30px;
-    }
-    .btn {
-        padding: 10px 18px; font-size: 15px;
-        border: none; border-radius: 5px; cursor: pointer;
-        background: #1a4d8f; color: #fff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    .btn:hover { background: #163f6d; }
+/* ========== GLOBAL STYLING ========== */
+body{
+    margin:0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color:#222;
+    background: linear-gradient(-45deg,#e3f2fd,#fce4ec,#e8f5e9,#fff3e0);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+header{
+    background:#ffffffcc;
+    backdrop-filter: blur(6px);
+    padding:20px;
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:1px;
+    position:relative;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+#clock{
+    position:absolute;
+    right:30px;
+    top:22px;
+    font-size:15px;
+    font-weight:600;
+    text-align:right;
+}
+
+/* ========== FILTER SECTION ========== */
+.filters{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+    padding:25px;
+    flex-wrap:wrap;
+}
+
+.filters input,
+.filters select{
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid #bbb;
+    font-size:14px;
+    min-width:150px;
+}
+
+/* ========== KPI CARD ========== */
+.kpi{
+    text-align:center;
+    font-size:22px;
+    font-weight:700;
+    margin:10px auto 25px auto;
+    padding:15px 30px;
+    width:fit-content;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ========== TABLE ========== */
+.table-container{
+    width:92%;
+    margin:auto;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    padding:15px;
+    max-height:400px;
+    overflow-y:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1976d2;
+    color:white;
+    padding:10px;
+    font-size:14px;
+}
+
+td{
+    padding:8px;
+    border-bottom:1px solid #eee;
+    font-size:13px;
+}
+
+tr:hover{
+    background:#f1f7ff;
+}
+
+/* ========== BUTTONS ========== */
+.buttons{
+    text-align:center;
+    margin:30px 0;
+}
+
+button{
+    padding:10px 22px;
+    font-size:14px;
+    border:none;
+    border-radius:6px;
+    margin:0 10px;
+    cursor:pointer;
+    background:#1976d2;
+    color:white;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#0d47a1;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-    <h1>ALNOOR GARDEN HOME EXPENSE</h1>
+    ALNOOR GARDEN HOME EXPESE
     <div id="clock"></div>
 </header>
 
 <div class="filters">
-    <div>
-        <label>From Date</label><br>
-        <input type="date" id="fromDate">
-    </div>
-    <div>
-        <label>To Date</label><br>
-        <input type="date" id="toDate">
-    </div>
-    <div>
-        <label>HEAD</label><br>
-        <select id="headFilter">
-            <option value="">All</option>
-            <option> ELECTRICITY BILL</option>
-            <option> SUI GAS BILL</option>
-            <option> WATER BILL</option>
-            <option> STORM FIBER</option>
-            <option> SECURITY BILL</option>
-            <option> GROCERY</option>
-            <option> PLUMBING</option>
-            <option> ELECTRIC WORK</option>
-            <option> CAR RELATED</option>
-            <option> MISC. HOUSEHOLD</option>
-            <option> MISC. EXPENSE</option>
-        </select>
-    </div>
-    <div>
-        <label>MODE</label><br>
-        <select id="modeFilter">
-            <option value="">All</option>
-            <option>CASH</option>
-            <option>ONLINE</option>
-            <option>DEBIT CARD</option>
-        </select>
-    </div>
+    <input type="date" id="fromDate">
+    <input type="date" id="toDate">
+
+    <select id="headFilter">
+        <option value="">All Heads</option>
+        <option>ELECTRICITY BILL</option>
+        <option>SUI GAS BILL</option>
+        <option>WATER BILL</option>
+        <option>STORM FIBER</option>
+        <option>SECURITY BILL</option>
+        <option>GROCERY</option>
+        <option>PLUMBING</option>
+        <option>ELECTRIC WORK</option>
+        <option>CAR RELATED</option>
+        <option>MISC. HOUSEHOLD</option>
+        <option>MISC. EXPENSE</option>
+    </select>
+
+    <select id="modeFilter">
+        <option value="">All Modes</option>
+        <option>CASH</option>
+        <option>ONLINE</option>
+        <option>DEBIT CARD</option>
+    </select>
 </div>
 
-<div id="kpi">Total Expense: 0</div>
+<div class="kpi" id="totalKPI">
+    Total Expense: 0
+</div>
 
-<table id="expenseTable">
+<div class="table-container">
+<table>
     <thead>
         <tr>
-            <th>DATE</th><th>HEAD</th><th>DESCRIPTION</th><th>AMOUNT</th><th>MODE</th>
+            <th>Date</th>
+            <th>Head</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Mode</th>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="expenseBody"></tbody>
 </table>
+</div>
 
 <div class="buttons">
-    <button class="btn" onclick="window.open('https://forms.gle/RHvNmsEchqCM1QK48','_blank')">
+    <button onclick="window.open('https://forms.gle/RHvNmsEchqCM1QK48','_blank')">
         Enter Expense Now
     </button>
-    <button class="btn" onclick="fetchAndRender()">Refresh Data</button>
+    <button onclick="fetchData()">Refresh Data</button>
 </div>
 
 <script>
 
-// -------------- Real Time Clock ----------------
+// ================= CLOCK =================
 function updateClock(){
     const now = new Date();
-    document.getElementById("clock").innerText =
-        now.toLocaleTimeString('en-US', { hour12: false });
+    const options = { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' };
+    const dateStr = now.toLocaleDateString('en-GB', options);
+    const timeStr = now.toLocaleTimeString('en-GB',{hour12:false});
+    document.getElementById("clock").innerHTML = `${timeStr}<br>${dateStr}`;
 }
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
+updateClock();
 
-// -------------- Data Fetch + Render ----------------
-const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
+// ================= DATA =================
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
 
-let expenseData = [];
+let allData = [];
 
-async function fetchAndRender(){
-    const res = await fetch(DATA_URL);
-    const csvText = await res.text();
-    parseCSV(csvText);
-    filterAndDisplay();
+async function fetchData(){
+    const response = await fetch(sheetURL);
+    const csv = await response.text();
+    parseCSV(csv);
+    filterData();
 }
 
 function parseCSV(csv){
-    const lines = csv.trim().split("\n");
-    const headers = lines[0].split(",");
-    expenseData = lines.slice(1).map(line => {
-        const cols = line.split(",");
+    const rows = csv.split("\n").slice(1);
+    allData = rows.map(r=>{
+        const cols = r.split(",");
         return {
-            date: cols[5] ? new Date(cols[5]) : null,
-            head: cols[1].trim(),
-            desc: cols[2].trim(),
+            head: cols[1]?.trim(),
+            desc: cols[2]?.trim(),
             amount: parseFloat(cols[3]) || 0,
-            mode: cols[4].trim()
+            mode: cols[4]?.trim(),
+            date: new Date(cols[5])
         };
-    });
+    }).filter(r=>r.date instanceof Date && !isNaN(r.date));
 }
 
-function filterAndDisplay(){
+function filterData(){
     const from = document.getElementById("fromDate").valueAsDate;
     const to = document.getElementById("toDate").valueAsDate;
-    const head = document.getElementById("headFilter").value.trim();
-    const mode = document.getElementById("modeFilter").value.trim();
+    const head = document.getElementById("headFilter").value;
+    const mode = document.getElementById("modeFilter").value;
 
-    let filtered = expenseData.filter(row => {
-        if(!row.date) return false;
-        if(from && row.date < from) return false;
-        if(to && row.date > to) return false;
-        if(head && row.head !== head) return false;
-        if(mode && row.mode !== mode) return false;
+    let filtered = allData.filter(r=>{
+        if(from && r.date < from) return false;
+        if(to && r.date > to) return false;
+        if(head && r.head !== head) return false;
+        if(mode && r.mode !== mode) return false;
         return true;
     });
 
     // KPI
-    const total = filtered.reduce((s, r) => s + r.amount, 0);
-    document.getElementById("kpi").innerText = "Total Expense: " + total.toFixed(2);
+    const total = filtered.reduce((sum,r)=>sum+r.amount,0);
+    document.getElementById("totalKPI").innerText = 
+        "Total Expense: " + total.toLocaleString();
 
     // Table
-    const tbody = document.querySelector("#expenseTable tbody");
-    tbody.innerHTML = "";
-    filtered.forEach(r => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${r.date.toISOString().split("T")[0]}</td>
-            <td>${r.head}</td>
-            <td>${r.desc}</td>
-            <td>${r.amount.toFixed(2)}</td>
-            <td>${r.mode}</td>
+    const tbody = document.getElementById("expenseBody");
+    tbody.innerHTML="";
+    filtered.sort((a,b)=>b.date-a.date);
+    filtered.forEach(r=>{
+        tbody.innerHTML += `
+            <tr>
+                <td>${r.date.toLocaleDateString('en-GB')}</td>
+                <td>${r.head}</td>
+                <td>${r.desc}</td>
+                <td>${r.amount.toLocaleString()}</td>
+                <td>${r.mode}</td>
+            </tr>
         `;
-        tbody.appendChild(tr);
     });
 }
 
-// Auto-refresh on filter change
-["fromDate","toDate","headFilter","modeFilter"].forEach(id => {
-    document.getElementById(id).addEventListener("change", filterAndDisplay);
+// Auto refresh on filter change
+["fromDate","toDate","headFilter","modeFilter"]
+.forEach(id=>{
+    document.getElementById(id).addEventListener("change",filterData);
 });
 
-// Initial load
-fetchAndRender();
+fetchData();
 
 </script>
 
