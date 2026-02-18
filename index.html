@@ -1,143 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>ALNOOR GARDEN HOME EXPESE</title>
+<title>ALNOOR GARDEN HOME EXPENSE</title>
 
 <style>
-/* ========== GLOBAL STYLING ========== */
 body{
     margin:0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    color:#222;
-    background: linear-gradient(-45deg,#e3f2fd,#fce4ec,#e8f5e9,#fff3e0);
-    background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
+    font-family:Segoe UI, sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
 }
 
-@keyframes gradientMove{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+.container{
+    width:95%;
+    margin:auto;
+    padding:20px;
 }
 
 header{
-    background:#ffffffcc;
-    backdrop-filter: blur(6px);
-    padding:20px;
     text-align:center;
-    font-size:26px;
-    font-weight:700;
-    letter-spacing:1px;
-    position:relative;
-    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:2px;
+    margin-bottom:10px;
 }
 
 #clock{
     position:absolute;
+    top:20px;
     right:30px;
-    top:22px;
-    font-size:15px;
-    font-weight:600;
     text-align:right;
+    font-size:14px;
 }
 
-/* ========== FILTER SECTION ========== */
 .filters{
     display:flex;
     justify-content:center;
-    align-items:center;
-    gap:20px;
-    padding:25px;
+    gap:15px;
     flex-wrap:wrap;
+    margin:20px 0;
 }
 
-.filters input,
-.filters select{
+.filters input, .filters select{
     padding:8px 12px;
     border-radius:6px;
-    border:1px solid #bbb;
-    font-size:14px;
-    min-width:150px;
+    border:none;
+    font-weight:bold;
 }
 
-/* ========== KPI CARD ========== */
 .kpi{
     text-align:center;
-    font-size:22px;
-    font-weight:700;
-    margin:10px auto 25px auto;
-    padding:15px 30px;
-    width:fit-content;
-    background:white;
-    border-radius:10px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ========== TABLE ========== */
-.table-container{
-    width:92%;
-    margin:auto;
-    background:white;
-    border-radius:10px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    font-size:32px;
+    font-weight:bold;
+    margin:20px 0;
     padding:15px;
-    max-height:400px;
-    overflow-y:auto;
+    border-radius:10px;
+    background:linear-gradient(90deg,#00c6ff,#0072ff);
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    background:white;
+    color:black;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+th, td{
+    padding:10px;
+    text-align:left;
 }
 
 th{
-    background:#1976d2;
+    background:#0072ff;
     color:white;
-    padding:10px;
-    font-size:14px;
 }
 
-td{
-    padding:8px;
-    border-bottom:1px solid #eee;
-    font-size:13px;
+tr:nth-child(even){
+    background:#f2f2f2;
 }
 
-tr:hover{
-    background:#f1f7ff;
-}
-
-/* ========== BUTTONS ========== */
 .buttons{
     text-align:center;
-    margin:30px 0;
+    margin:25px 0;
 }
 
 button{
-    padding:10px 22px;
-    font-size:14px;
+    padding:10px 20px;
+    margin:10px;
     border:none;
     border-radius:6px;
-    margin:0 10px;
+    font-weight:bold;
     cursor:pointer;
-    background:#1976d2;
+    background:linear-gradient(90deg,#ff512f,#dd2476);
     color:white;
-    transition:0.3s;
 }
 
 button:hover{
-    background:#0d47a1;
+    opacity:0.9;
+}
+
+#loginScreen{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#141e30,#243b55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+#loginScreen input{
+    padding:10px;
+    margin:10px;
+    border-radius:6px;
+    border:none;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    ALNOOR GARDEN HOME EXPESE
-    <div id="clock"></div>
-</header>
+<div id="loginScreen">
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordInput">
+    <button onclick="checkPassword()">Login</button>
+</div>
+
+<div class="container" id="dashboard" style="display:none;">
+
+<div id="clock"></div>
+
+<header>ALNOOR GARDEN HOME EXPENSE</header>
 
 <div class="filters">
     <input type="date" id="fromDate">
@@ -166,115 +163,124 @@ button:hover{
     </select>
 </div>
 
-<div class="kpi" id="totalKPI">
-    Total Expense: 0
+<div class="kpi">
+    TOTAL EXPENSE: Rs <span id="totalExpense">0</span>
 </div>
 
-<div class="table-container">
 <table>
-    <thead>
-        <tr>
-            <th>Date</th>
-            <th>Head</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Mode</th>
-        </tr>
-    </thead>
-    <tbody id="expenseBody"></tbody>
+<thead>
+<tr>
+<th>HEAD</th>
+<th>DESCRIPTION</th>
+<th>AMOUNT</th>
+<th>MODE</th>
+<th>DATE</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
 </table>
-</div>
 
 <div class="buttons">
     <button onclick="window.open('https://forms.gle/RHvNmsEchqCM1QK48','_blank')">
         Enter Expense Now
     </button>
     <button onclick="fetchData()">Refresh Data</button>
+    <button onclick="changePassword()">Change Password</button>
+</div>
+
 </div>
 
 <script>
-
-// ================= CLOCK =================
-function updateClock(){
-    const now = new Date();
-    const options = { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' };
-    const dateStr = now.toLocaleDateString('en-GB', options);
-    const timeStr = now.toLocaleTimeString('en-GB',{hour12:false});
-    document.getElementById("clock").innerHTML = `${timeStr}<br>${dateStr}`;
-}
-setInterval(updateClock,1000);
-updateClock();
-
-// ================= DATA =================
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
 
-let allData = [];
+let sheetData = [];
+let password = localStorage.getItem("dashboardPassword") || "1234";
 
-async function fetchData(){
-    const response = await fetch(sheetURL);
-    const csv = await response.text();
-    parseCSV(csv);
-    filterData();
+function checkPassword(){
+    const input = document.getElementById("passwordInput").value;
+    if(input === password){
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("dashboard").style.display="block";
+        fetchData();
+    } else {
+        alert("Incorrect Password");
+    }
 }
 
-function parseCSV(csv){
-    const rows = csv.split("\n").slice(1);
-    allData = rows.map(r=>{
-        const cols = r.split(",");
-        return {
-            head: cols[1]?.trim(),
-            desc: cols[2]?.trim(),
-            amount: parseFloat(cols[3]) || 0,
-            mode: cols[4]?.trim(),
-            date: new Date(cols[5])
-        };
-    }).filter(r=>r.date instanceof Date && !isNaN(r.date));
+function changePassword(){
+    const newPass = prompt("Enter New Password:");
+    if(newPass){
+        password = newPass;
+        localStorage.setItem("dashboardPassword", newPass);
+        alert("Password Changed Successfully");
+    }
 }
 
-function filterData(){
-    const from = document.getElementById("fromDate").valueAsDate;
-    const to = document.getElementById("toDate").valueAsDate;
+function fetchData(){
+    fetch(sheetURL)
+    .then(res=>res.text())
+    .then(csv=>{
+        const rows = csv.split("\n").slice(1);
+        sheetData = rows.map(r=>{
+            const cols = r.split(",");
+            return {
+                head: cols[1],
+                description: cols[2],
+                amount: parseFloat(cols[3]) || 0,
+                mode: cols[4],
+                date: cols[5]
+            }
+        });
+        applyFilters();
+    });
+}
+
+function applyFilters(){
+    const from = document.getElementById("fromDate").value;
+    const to = document.getElementById("toDate").value;
     const head = document.getElementById("headFilter").value;
     const mode = document.getElementById("modeFilter").value;
 
-    let filtered = allData.filter(r=>{
-        if(from && r.date < from) return false;
-        if(to && r.date > to) return false;
-        if(head && r.head !== head) return false;
-        if(mode && r.mode !== mode) return false;
-        return true;
+    let filtered = sheetData.filter(item=>{
+        let valid=true;
+        if(from && new Date(item.date)<new Date(from)) valid=false;
+        if(to && new Date(item.date)>new Date(to)) valid=false;
+        if(head && item.head!==head) valid=false;
+        if(mode && item.mode!==mode) valid=false;
+        return valid;
     });
 
-    // KPI
-    const total = filtered.reduce((sum,r)=>sum+r.amount,0);
-    document.getElementById("totalKPI").innerText = 
-        "Total Expense: " + total.toLocaleString();
-
-    // Table
-    const tbody = document.getElementById("expenseBody");
+    let total = 0;
+    const tbody=document.getElementById("tableBody");
     tbody.innerHTML="";
-    filtered.sort((a,b)=>b.date-a.date);
-    filtered.forEach(r=>{
-        tbody.innerHTML += `
-            <tr>
-                <td>${r.date.toLocaleDateString('en-GB')}</td>
-                <td>${r.head}</td>
-                <td>${r.desc}</td>
-                <td>${r.amount.toLocaleString()}</td>
-                <td>${r.mode}</td>
-            </tr>
-        `;
+
+    filtered.forEach(item=>{
+        total+=item.amount;
+        tbody.innerHTML+=`
+        <tr>
+            <td>${item.head}</td>
+            <td>${item.description}</td>
+            <td>${item.amount}</td>
+            <td>${item.mode}</td>
+            <td>${item.date}</td>
+        </tr>`;
     });
+
+    document.getElementById("totalExpense").innerText=total.toLocaleString();
 }
 
-// Auto refresh on filter change
-["fromDate","toDate","headFilter","modeFilter"]
-.forEach(id=>{
-    document.getElementById(id).addEventListener("change",filterData);
-});
+document.querySelectorAll("#fromDate,#toDate,#headFilter,#modeFilter")
+.forEach(el=>el.addEventListener("change",applyFilters));
 
-fetchData();
-
+function updateClock(){
+    const now=new Date();
+    const days=["SUN","MON","TUE","WED","THU","FRI","SAT"];
+    document.getElementById("clock").innerHTML=
+        now.toLocaleTimeString()+"<br>"+
+        now.toLocaleDateString("en-GB")+" "+days[now.getDay()];
+}
+setInterval(updateClock,1000);
+updateClock();
 </script>
 
 </body>
