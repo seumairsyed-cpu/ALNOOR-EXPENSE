@@ -5,14 +5,14 @@
 <title>ALNOOR GARDEN HOME EXPESE</title>
 
 <style>
-body {
+body{
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg,#e3f2fd,#f8fbff);
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#e3f2fd,#f9fbff);
 }
 
-.header {
-    background: linear-gradient(90deg,#1565c0,#42a5f5);
+.header{
+    background:linear-gradient(90deg,#1565c0,#42a5f5);
     color:white;
     padding:20px;
     text-align:center;
@@ -21,19 +21,18 @@ body {
     position:relative;
 }
 
-.clock {
+.clock{
     position:absolute;
     right:20px;
-    top:20px;
-    font-size:16px;
-    font-weight:500;
+    top:22px;
+    font-size:15px;
 }
 
-.container {
+.container{
     padding:25px;
 }
 
-.filters {
+.filters{
     display:flex;
     flex-wrap:wrap;
     gap:15px;
@@ -44,19 +43,19 @@ body {
     align-items:end;
 }
 
-.filters label {
+.filters label{
     font-size:13px;
     font-weight:600;
 }
 
-.filters input, .filters select {
+.filters input,.filters select{
     padding:8px;
     border-radius:6px;
     border:1px solid #ccc;
     min-width:150px;
 }
 
-button {
+button{
     background:#1565c0;
     color:white;
     border:none;
@@ -66,11 +65,11 @@ button {
     font-weight:600;
 }
 
-button:hover {
+button:hover{
     background:#0d47a1;
 }
 
-.kpi {
+.kpi{
     margin-top:25px;
     background:white;
     padding:20px;
@@ -79,20 +78,20 @@ button:hover {
     text-align:center;
 }
 
-.kpi h2 {
+.kpi h2{
     margin:0;
     font-size:18px;
     color:#555;
 }
 
-.kpi .value {
+.kpi .value{
     font-size:30px;
     font-weight:bold;
     color:#1565c0;
     margin-top:10px;
 }
 
-.table-container {
+.table-container{
     margin-top:25px;
     background:white;
     padding:20px;
@@ -100,22 +99,21 @@ button:hover {
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 
-table {
+table{
     width:100%;
     border-collapse:collapse;
 }
 
-th, td {
+th,td{
     padding:10px;
-    text-align:left;
     border-bottom:1px solid #eee;
 }
 
-th {
+th{
     background:#f1f6ff;
 }
 
-.enter-btn {
+.enter-btn{
     margin-top:20px;
     text-align:center;
 }
@@ -170,7 +168,7 @@ th {
     </div>
 
     <div>
-        <button onclick="applyFilters()">Apply Filter</button>
+        <button onclick="refreshData()">Refresh Data</button>
     </div>
 </div>
 
@@ -203,50 +201,42 @@ th {
 </div>
 
 <script>
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
+const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQuAsH1_3C4iz6LZFf4rBcPqI19su_PdhQiyEYd7HlAtkLOAUEliHkrGdsGg6Mj0RewWsgHZ4knskaJ/pub?gid=1464536103&single=true&output=csv";
 
-let allData = [];
+let allData=[];
 
 function fetchData(){
-    fetch(sheetURL)
-    .then(res => res.text())
-    .then(csv => {
-        const rows = csv.split("\n").slice(1);
-        allData = rows.map(row=>{
-            const cols = row.split(",");
-            return {
-                head: cols[1],
-                description: cols[2],
-                amount: parseFloat(cols[3]) || 0,
-                mode: cols[4],
-                date: new Date(cols[5])
+    fetch(sheetURL+"?t="+new Date().getTime()) // prevents caching
+    .then(res=>res.text())
+    .then(csv=>{
+        const rows=csv.split("\n").slice(1);
+        allData=rows.map(row=>{
+            const cols=row.split(",");
+            return{
+                head:(cols[1]||"").trim(),
+                description:(cols[2]||"").trim(),
+                amount:parseFloat(cols[3])||0,
+                mode:(cols[4]||"").trim(),
+                date:new Date(cols[5])
             };
-        });
+        }).filter(item=>item.date!="Invalid Date");
         applyFilters();
     });
 }
 
 function applyFilters(){
-    const from = document.getElementById("fromDate").value;
-    const to = document.getElementById("toDate").value;
-    const head = document.getElementById("headFilter").value;
-    const mode = document.getElementById("modeFilter").value;
+    const from=document.getElementById("fromDate").value;
+    const to=document.getElementById("toDate").value;
+    const head=document.getElementById("headFilter").value;
+    const mode=document.getElementById("modeFilter").value;
 
-    let filtered = allData.filter(item=>{
-        let valid = true;
+    let filtered=allData.filter(item=>{
+        let valid=true;
 
-        if(from){
-            valid = valid && item.date >= new Date(from);
-        }
-        if(to){
-            valid = valid && item.date <= new Date(to);
-        }
-        if(head){
-            valid = valid && item.head === head;
-        }
-        if(mode){
-            valid = valid && item.mode === mode;
-        }
+        if(from) valid=valid && item.date>=new Date(from);
+        if(to) valid=valid && item.date<=new Date(to+"T23:59:59");
+        if(head) valid=valid && item.head===head;
+        if(mode) valid=valid && item.mode===mode;
 
         return valid;
     });
@@ -256,34 +246,43 @@ function applyFilters(){
 }
 
 function updateTable(data){
-    const tbody = document.getElementById("expenseTable");
-    tbody.innerHTML = "";
-
+    const tbody=document.getElementById("expenseTable");
+    tbody.innerHTML="";
     data.forEach(item=>{
-        const row = `<tr>
+        tbody.innerHTML+=`
+        <tr>
             <td>${item.head}</td>
             <td>${item.description}</td>
             <td>${item.amount.toLocaleString()}</td>
             <td>${item.mode}</td>
             <td>${item.date.toISOString().split('T')[0]}</td>
         </tr>`;
-        tbody.innerHTML += row;
     });
 }
 
 function updateKPI(data){
-    const total = data.reduce((sum,item)=>sum+item.amount,0);
-    document.getElementById("totalExpense").innerText = total.toLocaleString();
+    const total=data.reduce((sum,item)=>sum+item.amount,0);
+    document.getElementById("totalExpense").innerText=total.toLocaleString();
+}
+
+function refreshData(){
+    fetchData();
 }
 
 function updateClock(){
-    const now = new Date();
-    document.getElementById("clock").innerText =
-        now.toLocaleDateString() + " " + now.toLocaleTimeString();
+    const now=new Date();
+    document.getElementById("clock").innerText=
+        now.toLocaleDateString()+" "+now.toLocaleTimeString();
 }
 
 setInterval(updateClock,1000);
 updateClock();
+
+/* Auto apply filters when values change */
+document.getElementById("fromDate").addEventListener("change",applyFilters);
+document.getElementById("toDate").addEventListener("change",applyFilters);
+document.getElementById("headFilter").addEventListener("change",applyFilters);
+document.getElementById("modeFilter").addEventListener("change",applyFilters);
 
 fetchData();
 </script>
